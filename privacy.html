@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <meta name="theme-color" content="#f4f4f4" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0e0f11" media="(prefers-color-scheme: dark)">
+  <title>Datenschutz · Screen Link</title>
+  <link rel="stylesheet" href="legal.css">
+</head>
+<body><main>
+  <header><a class="back" href="index.html" aria-label="Zurück"><svg viewBox="0 0 24 24"><path d="m10 6-6 6 6 6M4 12h16"/></svg></a><h1>Datenschutz</h1></header>
+
+  <h2>1. Private Nutzung</h2>
+  <p>Diese Seite wird ausschließlich als privates Hilfsmittel zur Kopplung des eigenen Tesla-Browsers mit dem eigenen Android-Gerät betrieben. Die App und der Dienst werden nicht öffentlich angeboten oder vertrieben. Screen Link setzt keine eigenen Analyse- oder Werbedienste ein und legt auf dieser Seite keine eigenen Cookies an.</p>
+
+  <h2>2. GitHub Pages</h2>
+  <p>Diese Seite wird über GitHub Pages bereitgestellt. Beim Abruf verarbeitet GitHub insbesondere IP-Adresse, Geräte- und Browserinformationen, Zeitpunkt und angeforderte Inhalte. GitHub gibt an, IP-Adressen von Besuchern von GitHub-Pages-Seiten unabhängig von einer Anmeldung zu Sicherheitszwecken zu protokollieren.</p>
+  <p>Empfänger ist GitHub, Inc., 88 Colin P. Kelly Jr. Street, San Francisco, CA 94107, USA. Die Verarbeitung erfolgt zur sicheren und zuverlässigen Bereitstellung der Seite auf Grundlage von Art. 6 Abs. 1 lit. f DSGVO. Das berechtigte Interesse liegt in der sicheren Bereitstellung der Pairing-Seite. Informationen zu Speicherung, Empfängern und internationalen Übermittlungen enthält die <a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement">Datenschutzerklärung von GitHub</a>.</p>
+
+  <h2>3. Mitgelieferte JavaScript-Dateien</h2>
+  <p>PeerJS 1.5.5 und QRCode.js 1.0.0 werden gemeinsam mit dieser Seite über GitHub Pages ausgeliefert. Beim Laden dieser Bibliotheken entsteht deshalb keine zusätzliche Verbindung zu unpkg oder jsDelivr. Die zugehörigen Lizenztexte sind unter <a href="licenses.html">Lizenzen</a> verfügbar.</p>
+
+  <h2>4. PeerJS und WebRTC-Signalisierung</h2>
+  <p>Für die einmalige Kopplung verbindet sich die Seite mit dem öffentlichen PeerServer Cloud von PeerJS unter <code>0.peerjs.com</code>. PeerJS dokumentiert, dass während einer Verbindung IP-Adresse, zufällig erzeugte Peer-ID und Signalisierungsdaten im Arbeitsspeicher des Servers gehalten und bei Standardeinstellung 60 Sekunden nach Ende der Kommunikation entfernt werden. Der Signalisierungsserver vermittelt die WebRTC-Verbindung; er transportiert nicht den späteren Bildschirmstream.</p>
+  <p>Die Standardkonfiguration von PeerJS verwendet außerdem den STUN-Dienst <code>stun.l.google.com:19302</code>. Dabei können Google die öffentliche IP-Adresse und technische Verbindungsmetadaten bekannt werden. Diese Verarbeitung ist für die zuverlässige Verbindungsanbahnung erforderlich und beruht auf Art. 6 Abs. 1 lit. f DSGVO. Weitere Informationen: <a href="https://github.com/peers/peerjs-server/blob/master/PRIVACY.md">PeerServer Privacy Policy</a> und <a href="https://policies.google.com/privacy">Datenschutzerklärung von Google</a>.</p>
+
+  <h2>5. sslip.io und lokale Verbindung</h2>
+  <p>Nach der Kopplung erzeugt die Android-App einen Hostnamen wie <code>192-168-1-2.sslip.io</code>. sslip.io ist ein DNS-Dienst, der die im Hostnamen enthaltene IP-Adresse zurückliefert. Dadurch werden der DNS-Infrastruktur und gegebenenfalls dem Betreiber von sslip.io die DNS-Anfrage und die darin enthaltene lokale IPv4-Adresse bekannt. Der zufällige Zugriffstoken ist nicht Bestandteil der DNS-Anfrage.</p>
+  <p>Nach der DNS-Auflösung verbindet sich der Tesla-Browser direkt mit dem lokalen Webserver auf dem Android-Gerät. Bildschirminhalt, Steuerbefehle, App-Liste und App-Symbole werden nicht über GitHub Pages, sslip.io oder PeerJS übertragen. Sie verbleiben grundsätzlich im lokalen WLAN beziehungsweise Hotspot.</p>
+
+  <h2>6. Pairing-Daten und Speicherdauer</h2>
+  <p>Die Seite erzeugt eine zufällige, sitzungsbezogene Peer-ID. Die Android-App übermittelt darüber einmalig die lokale, mit einem zufälligen Token geschützte Verbindungsadresse. Screen Link betreibt hierfür keine eigene zentrale Datenbank. Ausgeblendete Apps und App-Einstellungen werden ausschließlich lokal auf dem Android-Gerät gespeichert. Browser-Verlauf und Zwischenspeicher können Verbindungsadressen nach den Einstellungen des Browsers vorübergehend enthalten.</p>
+
+  <h2>7. Rechtsgrundlage und Bereitstellung</h2>
+  <p>Die genannten technischen Verarbeitungen sind für die vom Nutzer angeforderte Kopplung und sichere Bereitstellung erforderlich. Ohne GitHub Pages, DNS-Auflösung und WebRTC-Signalisierung funktioniert der derzeitige Pairing-Ablauf nicht. Eine automatisierte Entscheidungsfindung oder Profilbildung findet durch Screen Link nicht statt.</p>
+
+  <h2>8. Rechte betroffener Personen</h2>
+  <p>Betroffene Personen haben nach Maßgabe der DSGVO insbesondere Rechte auf Auskunft, Berichtigung, Löschung, Einschränkung der Verarbeitung, Datenübertragbarkeit und Widerspruch. Außerdem besteht ein Beschwerderecht bei einer Datenschutzaufsichtsbehörde. Für Verarbeitungen durch die genannten Fremddienste gelten zusätzlich deren Kontakt- und Beschwerdewege.</p>
+
+  <h2>9. Stand</h2><p>21. August 2026</p>
+  <footer>Diese Information beschreibt die aktuell im Quellcode verwendeten Dienste. Sie ersetzt keine individuelle Rechtsberatung.</footer>
+</main></body>
+</html>
