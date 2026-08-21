@@ -2,6 +2,7 @@
   const qr = document.querySelector('#qr');
   const state = document.querySelector('#state');
   let peer;
+  let completed = false;
 
   const validTarget = value => {
     try {
@@ -9,6 +10,16 @@
       return url.protocol === 'http:' && /^(?:\d{1,3}-){3}\d{1,3}\.sslip\.io$/.test(url.hostname)
         && url.port === '9090' && url.searchParams.get('token')?.length >= 20;
     } catch (_) { return false; }
+  };
+
+  const acceptTarget = message => {
+    if (completed || message?.type !== 'screen-link' || !validTarget(message.url)) return false;
+    completed = true;
+    state.className = 'connected';
+    const target = new URL(message.url);
+    target.searchParams.set('return', location.href);
+    location.assign(target.href);
+    return true;
   };
 
   function start() {
@@ -34,15 +45,10 @@
       state.className = 'ready';
     });
     peer.on('connection', connection => {
+      // Metadata arrives with the PeerJS signaling offer, before WebRTC/ICE completes.
+      if (acceptTarget(connection.metadata)) return;
       connection.on('data', message => {
-        if (message?.type === 'screen-link' && validTarget(message.url)) {
-          state.className = 'connected';
-          const target = new URL(message.url);
-          target.searchParams.set('return', location.href);
-          location.assign(target.href);
-        } else {
-          state.className = 'error';
-        }
+        if (!acceptTarget(message)) state.className = 'error';
       });
       connection.on('error', () => { state.className = 'error'; });
     });
