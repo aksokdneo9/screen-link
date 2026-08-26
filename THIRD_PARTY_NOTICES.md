@@ -41,6 +41,8 @@ The complete license texts required for redistributed components are stored in [
 
 ## Castla reference
 
-[Castla](https://github.com/Suprhimp/castla) was reviewed as an architectural and compatibility reference. No Castla source files are included in Screen Link. If Castla code is copied or modified in the future, its Apache-2.0 license, copyright notices, and applicable `NOTICE` content must be retained with those files and distributions.
+[Castla](https://github.com/Suprhimp/castla) was reviewed as an architectural and compatibility reference. Screen Link's `TunTcpRelay` is based on Castla's Apache-2.0-licensed prototype and has been modified substantially to add acknowledgement tracking, flow control, retransmission, stricter packet parsing, and Screen Link integration.
+
+Castla — Copyright (C) 2024 Castla. The Apache License 2.0 text and the applicable Castla NOTICE are retained with this distribution.
 
 Screen Link's own source-code license is separate from these third-party licenses.

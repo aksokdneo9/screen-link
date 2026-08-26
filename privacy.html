@@ -27,19 +27,22 @@
   <p>Die Standardkonfiguration von PeerJS verwendet außerdem den STUN-Dienst <code>stun.l.google.com:19302</code>. Dabei können Google die öffentliche IP-Adresse und technische Verbindungsmetadaten bekannt werden. Diese Verarbeitung ist für die zuverlässige Verbindungsanbahnung erforderlich und beruht auf Art. 6 Abs. 1 lit. f DSGVO. Weitere Informationen: <a href="https://github.com/peers/peerjs-server/blob/master/PRIVACY.md">PeerServer Privacy Policy</a> und <a href="https://policies.google.com/privacy">Datenschutzerklärung von Google</a>.</p>
 
   <h2>5. sslip.io und lokale Verbindung</h2>
-  <p>Nach der Kopplung erzeugt die Android-App einen Hostnamen wie <code>192-168-1-2.sslip.io</code>. sslip.io ist ein DNS-Dienst, der die im Hostnamen enthaltene IP-Adresse zurückliefert. Dadurch werden der DNS-Infrastruktur und gegebenenfalls dem Betreiber von sslip.io die DNS-Anfrage und die darin enthaltene lokale IPv4-Adresse bekannt. Der zufällige Zugriffstoken ist nicht Bestandteil der DNS-Anfrage.</p>
+  <p>Nach der Kopplung erzeugt die Android-App einen Hostnamen für die virtuelle lokale Adresse, beispielsweise <code>100-99-17-1.sslip.io</code>. sslip.io ist ein DNS-Dienst, der die im Hostnamen enthaltene IP-Adresse zurückliefert. Dadurch werden der DNS-Infrastruktur und gegebenenfalls dem Betreiber von sslip.io die DNS-Anfrage und die darin enthaltene virtuelle IPv4-Adresse bekannt. Der zufällige Zugriffstoken ist nicht Bestandteil der DNS-Anfrage.</p>
   <p>Nach der DNS-Auflösung verbindet sich der Tesla-Browser direkt mit dem lokalen Webserver auf dem Android-Gerät. Bildschirminhalt, Steuerbefehle, App-Liste und App-Symbole werden nicht über GitHub Pages, sslip.io oder PeerJS übertragen. Sie verbleiben grundsätzlich im lokalen WLAN beziehungsweise Hotspot.</p>
 
-  <h2>6. Pairing-Daten und Speicherdauer</h2>
+  <h2>6. Lokaler VPN-Transport</h2>
+  <p>Die App verwendet Androids VPN-Schnittstelle, um ausschließlich auf dem Gerät die virtuelle Adresse <code>100.99.17.1</code> bereitzustellen. Diese Funktion baut keine Verbindung zu einem VPN-Anbieter oder externen VPN-Server auf. Ein lokaler TCP-Relay leitet Verbindungen des Tesla-Browsers an den ebenfalls lokalen Screen-Link-Webserver weiter. Android zeigt für diese Funktion den systemeigenen VPN-Zustimmungsdialog und während der Nutzung den VPN-Status an.</p>
+
+  <h2>7. Pairing-Daten und Speicherdauer</h2>
   <p>Die Seite erzeugt eine zufällige, sitzungsbezogene Peer-ID. Die Android-App übermittelt darüber einmalig die lokale, mit einem zufälligen Token geschützte Verbindungsadresse. Screen Link betreibt hierfür keine eigene zentrale Datenbank. Ausgeblendete Apps und App-Einstellungen werden ausschließlich lokal auf dem Android-Gerät gespeichert. Browser-Verlauf und Zwischenspeicher können Verbindungsadressen nach den Einstellungen des Browsers vorübergehend enthalten.</p>
 
-  <h2>7. Rechtsgrundlage und Bereitstellung</h2>
+  <h2>8. Rechtsgrundlage und Bereitstellung</h2>
   <p>Die genannten technischen Verarbeitungen sind für die vom Nutzer angeforderte Kopplung und sichere Bereitstellung erforderlich. Ohne GitHub Pages, DNS-Auflösung und WebRTC-Signalisierung funktioniert der derzeitige Pairing-Ablauf nicht. Eine automatisierte Entscheidungsfindung oder Profilbildung findet durch Screen Link nicht statt.</p>
 
-  <h2>8. Rechte betroffener Personen</h2>
+  <h2>9. Rechte betroffener Personen</h2>
   <p>Betroffene Personen haben nach Maßgabe der DSGVO insbesondere Rechte auf Auskunft, Berichtigung, Löschung, Einschränkung der Verarbeitung, Datenübertragbarkeit und Widerspruch. Außerdem besteht ein Beschwerderecht bei einer Datenschutzaufsichtsbehörde. Für Verarbeitungen durch die genannten Fremddienste gelten zusätzlich deren Kontakt- und Beschwerdewege.</p>
 
-  <h2>9. Stand</h2><p>21. August 2026</p>
+  <h2>10. Stand</h2><p>26. August 2026</p>
   <footer>Diese Information beschreibt die aktuell im Quellcode verwendeten Dienste. Sie ersetzt keine individuelle Rechtsberatung.</footer>
 </main></body>
 </html>

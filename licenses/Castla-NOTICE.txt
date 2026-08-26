@@ -1,0 +1,8 @@
+Castla
+Copyright (C) 2024 Castla
+
+Screen Link includes a modified implementation based on Castla's
+Apache-2.0-licensed TunTcpRelay prototype.
+
+Source: https://github.com/Suprhimp/castla
+License: Apache License 2.0
