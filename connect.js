@@ -4,10 +4,23 @@
   let peer;
   let completed = false;
 
+  const validSslipHost = hostname => {
+    if (/^(?:\d{1,3}-){3}\d{1,3}\.sslip\.io$/.test(hostname)) return true;
+    if (!hostname.endsWith('.sslip.io')) return false;
+    const embedded = hostname.slice(0, -'.sslip.io'.length);
+    if (!/^[0-9a-f-]+$/.test(embedded)) return false;
+    try {
+      const parsed = new URL(`http://[${embedded.replaceAll('-', ':')}]`);
+      return parsed.hostname.startsWith('[') && parsed.hostname.endsWith(']');
+    } catch (_) {
+      return false;
+    }
+  };
+
   const validTarget = value => {
     try {
       const url = new URL(value);
-      return url.protocol === 'http:' && /^(?:\d{1,3}-){3}\d{1,3}\.sslip\.io$/.test(url.hostname)
+      return url.protocol === 'http:' && validSslipHost(url.hostname)
         && url.port === '9090' && url.searchParams.get('token')?.length >= 20;
     } catch (_) { return false; }
   };
