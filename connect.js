@@ -21,11 +21,30 @@
     try {
       const url = new URL(value);
       return url.protocol === 'http:' && validSslipHost(url.hostname)
-        && url.port === '9090' && url.searchParams.get('token')?.length >= 20;
+        && url.port === '9090' && new URLSearchParams(url.hash.slice(1)).get('token')?.length >= 20;
     } catch (_) { return false; }
   };
 
-  const acceptTarget = message => {
+  const fromBase64Url = value => Uint8Array.from(
+    atob(value.replaceAll('-', '+').replaceAll('_', '/') + '='.repeat((4 - value.length % 4) % 4)),
+    char => char.charCodeAt(0)
+  );
+
+  const decryptTarget = async (message, pairingKey) => {
+    if (message?.type !== 'screen-link-encrypted') return null;
+    try {
+      const key = await crypto.subtle.importKey('raw', fromBase64Url(pairingKey), 'AES-GCM', false, ['decrypt']);
+      const plaintext = await crypto.subtle.decrypt(
+        { name: 'AES-GCM', iv: fromBase64Url(message.iv) },
+        key,
+        fromBase64Url(message.ciphertext)
+      );
+      return JSON.parse(new TextDecoder().decode(plaintext));
+    } catch (_) { return null; }
+  };
+
+  const acceptTarget = async (encrypted, pairingKey) => {
+    const message = await decryptTarget(encrypted, pairingKey);
     if (completed || message?.type !== 'screen-link' || !validTarget(message.url)) return false;
     completed = true;
     state.className = 'connected';
@@ -44,11 +63,15 @@
     const random = new Uint8Array(32);
     crypto.getRandomValues(random);
     const viewerId = `screen-link-viewer-${Array.from(random, byte => byte.toString(16).padStart(2, '0')).join('')}`;
+    const keyBytes = new Uint8Array(32);
+    crypto.getRandomValues(keyBytes);
+    const pairingKey = btoa(String.fromCharCode(...keyBytes))
+      .replaceAll('+', '-').replaceAll('/', '_').replaceAll('=', '');
     peer = new Peer(viewerId);
     peer.on('open', id => {
       qr.replaceChildren();
       new QRCode(qr, {
-        text: `screenlink://connect?peer=${encodeURIComponent(id)}`,
+        text: `screenlink://connect?peer=${encodeURIComponent(id)}&key=${encodeURIComponent(pairingKey)}`,
         width: 256,
         height: 256,
         colorDark: '#171a20',
@@ -58,10 +81,12 @@
       state.className = 'ready';
     });
     peer.on('connection', connection => {
-      // Metadata arrives with the PeerJS signaling offer, before WebRTC/ICE completes.
-      if (acceptTarget(connection.metadata)) return;
-      connection.on('data', message => {
-        if (!acceptTarget(message)) state.className = 'error';
+      // The signaling server can relay this before WebRTC is ready, but only the
+      // browser that created the QR code owns the key needed to read it.
+      acceptTarget(connection.metadata, pairingKey);
+      connection.on('data', async message => {
+        const accepted = await acceptTarget(message, pairingKey);
+        if (!completed && !accepted) state.className = 'error';
       });
       connection.on('error', () => { state.className = 'error'; });
     });
