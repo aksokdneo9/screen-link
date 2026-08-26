@@ -3,6 +3,7 @@
   const state = document.querySelector('#state');
   let peer;
   let completed = false;
+  let recoveryTimer;
 
   const validSslipHost = hostname => {
     if (/^(?:\d{1,3}-){3}\d{1,3}\.sslip\.io$/.test(hostname)) return true;
@@ -55,6 +56,8 @@
   };
 
   function start() {
+    clearTimeout(recoveryTimer);
+    try { peer?.destroy(); } catch (_) {}
     if (!window.Peer || !window.QRCode) {
       state.className = 'error';
       return;
@@ -90,7 +93,27 @@
       });
       connection.on('error', () => { state.className = 'error'; });
     });
-    peer.on('error', () => { state.className = 'error'; });
+    const recover = (fresh = false) => {
+      if (completed) return;
+      state.className = 'connecting';
+      clearTimeout(recoveryTimer);
+      recoveryTimer = setTimeout(() => {
+        try {
+          if (fresh || peer?.destroyed) start();
+          else if (peer?.disconnected) peer.reconnect();
+        } catch (_) { start(); }
+      }, 900);
+    };
+    peer.on('disconnected', () => recover(false));
+    peer.on('close', () => recover(true));
+    peer.on('error', error => {
+      const fresh = ['unavailable-id', 'invalid-id', 'invalid-key'].includes(error?.type);
+      recover(fresh);
+    });
+    window.ononline = () => recover(false);
+    document.onvisibilitychange = () => {
+      if (!document.hidden && peer?.disconnected) recover(false);
+    };
   }
 
   start();
