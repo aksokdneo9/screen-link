@@ -55,6 +55,25 @@
     return true;
   };
 
+  const pairingCredentials = () => {
+    try {
+      const saved = JSON.parse(sessionStorage.getItem('screen-link-pairing') || 'null');
+      if (saved?.viewerId && saved?.pairingKey && Date.now() - saved.createdAt < 30 * 60 * 1000) return saved;
+    } catch (_) {}
+    const random = new Uint8Array(32);
+    crypto.getRandomValues(random);
+    const keyBytes = new Uint8Array(32);
+    crypto.getRandomValues(keyBytes);
+    const created = {
+      viewerId: `screen-link-viewer-${Array.from(random, byte => byte.toString(16).padStart(2, '0')).join('')}`,
+      pairingKey: btoa(String.fromCharCode(...keyBytes))
+        .replaceAll('+', '-').replaceAll('/', '_').replaceAll('=', ''),
+      createdAt: Date.now()
+    };
+    sessionStorage.setItem('screen-link-pairing', JSON.stringify(created));
+    return created;
+  };
+
   function start() {
     clearTimeout(recoveryTimer);
     try { peer?.destroy(); } catch (_) {}
@@ -63,13 +82,7 @@
       return;
     }
     state.className = 'connecting';
-    const random = new Uint8Array(32);
-    crypto.getRandomValues(random);
-    const viewerId = `screen-link-viewer-${Array.from(random, byte => byte.toString(16).padStart(2, '0')).join('')}`;
-    const keyBytes = new Uint8Array(32);
-    crypto.getRandomValues(keyBytes);
-    const pairingKey = btoa(String.fromCharCode(...keyBytes))
-      .replaceAll('+', '-').replaceAll('/', '_').replaceAll('=', '');
+    const { viewerId, pairingKey } = pairingCredentials();
     peer = new Peer(viewerId);
     peer.on('open', id => {
       qr.replaceChildren();
@@ -84,9 +97,7 @@
       state.className = 'ready';
     });
     peer.on('connection', connection => {
-      // The signaling server can relay this before WebRTC is ready, but only the
-      // browser that created the QR code owns the key needed to read it.
-      acceptTarget(connection.metadata, pairingKey);
+      connection.on('open', () => connection.send({ type: 'viewer-ready' }));
       connection.on('data', async message => {
         const accepted = await acceptTarget(message, pairingKey);
         if (!completed && !accepted) state.className = 'error';
